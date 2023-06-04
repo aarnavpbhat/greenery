@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -21,6 +21,7 @@ const Tab1: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [identifiedPlant, setIdentifiedPlant] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*' as unknown as Accept,
@@ -28,6 +29,27 @@ const Tab1: React.FC = () => {
       setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...acceptedFiles]);
     },
   });
+
+  const captureImage = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement && videoElement.srcObject) {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      if (context) {
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const file = new File([blob], 'captured-image.png');
+            setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, file]);
+          }
+        }, 'image/png');
+      }
+    }
+  };
 
   const identifyPlant = async () => {
     setLoading(true);
@@ -77,6 +99,23 @@ const Tab1: React.FC = () => {
     }
   }, [selectedFiles]);
 
+  useEffect(() => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          const videoElement = videoRef.current;
+
+          if (videoElement) {
+            videoElement.srcObject = stream;
+          }
+        })
+        .catch((error) => {
+          console.error('Error accessing camera:', error);
+        });
+    }
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -89,9 +128,13 @@ const Tab1: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <div className="camera-container">
+          <video ref={videoRef} className="camera-preview" autoPlay playsInline muted />
+        </div>
         <div className="dropzone-container" {...getRootProps()}>
           <input {...getInputProps()} />
           <IonButton>Upload Photo</IonButton>
+          <IonButton onClick={captureImage}>Capture Photo</IonButton>
         </div>
         <IonLoading isOpen={loading} message={'Identifying plant...'} />
         {identifiedPlant?.suggestions?.length > 0 && (
@@ -99,7 +142,9 @@ const Tab1: React.FC = () => {
             <h2>Plant Identified!</h2>
             <div className="identification-details">
               <p>Common Name: {identifiedPlant.suggestions[0].plant_name}</p>
-              <p>Scientific Name: {identifiedPlant.suggestions[0].plant_details.name_authority}</p>
+              <p>
+                Scientific Name: {identifiedPlant.suggestions[0].plant_details.name_authority}
+              </p>
               {/* Display additional plant details as needed */}
             </div>
           </div>
