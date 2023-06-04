@@ -28,10 +28,6 @@ const Tab1: React.FC = () => {
       setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...acceptedFiles]);
     },
   });
-  
-  
-  
-  
 
   const identifyPlant = async () => {
     setLoading(true);
@@ -85,27 +81,27 @@ const Tab1: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>
+            <div className="logo-container">
+              <span className="logo-text">Greenery</span>
+            </div>
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
-        <div className="dropzone" {...getRootProps()}>
+        <div className="dropzone-container" {...getRootProps()}>
           <input {...getInputProps()} />
-          <IonButton>Select Photo</IonButton>
+          <IonButton>Upload Photo</IonButton>
         </div>
         <IonLoading isOpen={loading} message={'Identifying plant...'} />
         {identifiedPlant?.suggestions?.length > 0 && (
           <div className="identification-result">
             <h2>Plant Identified!</h2>
-            <p>Common Name: {identifiedPlant.suggestions[0].plant_name}</p>
-            <p>Scientific Name: {identifiedPlant.suggestions[0].plant_details.name_authority}</p>
-            {/* Display additional plant details as needed */}
+            <div className="identification-details">
+              <p>Common Name: {identifiedPlant.suggestions[0].plant_name}</p>
+              <p>Scientific Name: {identifiedPlant.suggestions[0].plant_details.name_authority}</p>
+              {/* Display additional plant details as needed */}
+            </div>
           </div>
         )}
       </IonContent>

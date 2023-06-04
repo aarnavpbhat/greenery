@@ -1,25 +1,78 @@
 /* Tab1.css */
-.dropzone {
-    margin: 16px;
-    padding: 16px;
-    border: 2px dashed #ccc;
-    text-align: center;
+
+/* Color Variables */
+:root {
+    --primary-color: #264653;
+    --secondary-color: #2A9D8F;
+    --accent-color: #E9C46A;
+    --highlight-color: #F4A261;
+    --error-color: #E76F51;
   }
   
+  /* Page Container */
+  ion-content {
+    --background: var(--primary-color);
+    --ion-background-color: var(--primary-color);
+  }
+  
+  /* Header */
+  ion-toolbar {
+    --background: var(--primary-color);
+  }
+  
+  /* Title */
+  ion-title {
+    color: var(--secondary-color);
+    font-size: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* Dropzone Container */
+  .dropzone-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    border: 2px dashed var(--secondary-color);
+    border-radius: 4px;
+    margin: 20px;
+    padding: 20px;
+    background-color: var(--secondary-color);
+  }
+  
+  .dropzone-container:hover {
+    background-color: var(--highlight-color);
+  }
+  
+  /* Upload Photo Button */
+  .dropzone-container ion-button {
+    --background: var(--accent-color);
+    --border-color: var(--accent-color);
+    color: var(--primary-color);
+    font-size: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* Identification Result */
   .identification-result {
     margin: 16px;
     padding: 16px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
+    border: 1px solid var(--accent-color);
+    background-color: var(--accent-color);
   }
   
   .identification-result h2 {
     font-size: 24px;
     margin-bottom: 8px;
+    color: var(--primary-color);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
   }
   
   .identification-result p {
     font-size: 16px;
     margin-bottom: 4px;
+    color: var(--primary-color);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
   }
   
