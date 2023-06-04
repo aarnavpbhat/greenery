@@ -1,0 +1,25 @@
+/* Tab1.css */
+.dropzone {
+    margin: 16px;
+    padding: 16px;
+    border: 2px dashed #ccc;
+    text-align: center;
+  }
+  
+  .identification-result {
+    margin: 16px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+  }
+  
+  .identification-result h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .identification-result p {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  

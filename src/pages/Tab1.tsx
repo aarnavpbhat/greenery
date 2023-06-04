@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonLoading,
+  IonButton,
+} from '@ionic/react';
+import { Accept, useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import { useDropzone, Accept } from 'react-dropzone';
+
+import ExploreContainer from '../components/ExploreContainer';
+import './Tab1.css';
+
+const API_KEY = 'zzzY1UTrDWNYh9OQgiEkeRHAqOi8ylA47u4Wuq5wxu9ALdb0UN';
+const API_ENDPOINT = 'https://api.plant.id/v2/identify';
 
 const Tab1: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -15,9 +28,13 @@ const Tab1: React.FC = () => {
       setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...acceptedFiles]);
     },
   });
+  
+  
+  
+  
 
   const identifyPlant = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
 
     const base64files = await Promise.all(
       selectedFiles.map((file) => {
@@ -33,33 +50,28 @@ const Tab1: React.FC = () => {
       })
     );
 
-    const data = JSON.stringify({
-      api_key: "zzzY1UTrDWNYh9OQgiEkeRHAqOi8ylA47u4Wuq5wxu9ALdb0UN",
+    const requestData = {
+      api_key: API_KEY,
       images: base64files,
-      modifiers: ["crops_fast", "similar_images"],
-      plant_language: "en",
+      modifiers: ['crops_fast', 'similar_images'],
+      plant_language: 'en',
       plant_details: [
-        "common_names",
-        "url",
-        "name_authority",
-        "wiki_description",
-        "taxonomy",
-        "synonyms"
+        'common_names',
+        'url',
+        'name_authority',
+        'wiki_description',
+        'taxonomy',
+        'synonyms',
       ],
-    });
+    };
 
     try {
-      const response = await axios.post('https://api.plant.id/v2/identify', data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
+      const response = await axios.post(API_ENDPOINT, requestData);
       setIdentifiedPlant(response.data);
     } catch (error) {
       console.error('Error:', error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -83,13 +95,13 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <ExploreContainer name="Tab 1 page" />
-        <div {...getRootProps()}>
+        <div className="dropzone" {...getRootProps()}>
           <input {...getInputProps()} />
-          <button>Select Photo</button>
+          <IonButton>Select Photo</IonButton>
         </div>
-        {loading && <p>Identifying plant...</p>}
-        {identifiedPlant && identifiedPlant.suggestions && identifiedPlant.suggestions.length > 0 && (
-          <div>
+        <IonLoading isOpen={loading} message={'Identifying plant...'} />
+        {identifiedPlant?.suggestions?.length > 0 && (
+          <div className="identification-result">
             <h2>Plant Identified!</h2>
             <p>Common Name: {identifiedPlant.suggestions[0].plant_name}</p>
             <p>Scientific Name: {identifiedPlant.suggestions[0].plant_details.name_authority}</p>
