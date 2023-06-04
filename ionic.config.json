@@ -1,0 +1,8 @@
+{
+  "name": "Greenery",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "706aaf5f"
+}
