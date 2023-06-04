@@ -2,11 +2,11 @@
 
 /* Color Variables */
 :root {
-    --primary-color: #264653;
-    --secondary-color: #2A9D8F;
-    --accent-color: #E9C46A;
-    --highlight-color: #F4A261;
-    --error-color: #E76F51;
+    --primary-color: #06d6a0;
+    --secondary-color: white;
+    --accent-color: white;
+    --highlight-color: white;
+    --error-color: white;
   }
   
   /* Page Container */
